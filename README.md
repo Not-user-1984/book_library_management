@@ -21,7 +21,7 @@
 
 1. **Клонируйте репозиторий**:
    ```bash
-   git clone https://github.com/yourusername/book-library-management.git
+   git clone git@github.com:Not-user-1984/book_library_management.git
    cd book-library-management
    ```
 
