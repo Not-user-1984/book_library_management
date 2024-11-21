@@ -2,6 +2,7 @@ import unittest
 import sqlite3
 from src.database_manager import DatabaseManager
 
+
 class TestDatabaseManager(unittest.TestCase):
 
     def setUp(self):

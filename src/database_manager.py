@@ -1,6 +1,11 @@
 import sqlite3
 from typing import List, Dict, Union, Optional
 from .animation import Animation
+from .validation_db import (
+    is_unique_username,
+    is_unique_book_title,
+    is_valid_year
+    )
 
 
 class DatabaseManager:
@@ -36,6 +41,10 @@ class DatabaseManager:
 
     def add_user(self, username: str, password: str) -> None:
         """Добавляет пользователя в базу данных."""
+        if not is_unique_username(self.cursor, username):
+            print("Пользователь с таким именем уже существует.")
+            return
+
         self.cursor.execute(
             'INSERT INTO users (username, password) VALUES (?, ?)',
             (username, password))
@@ -68,6 +77,14 @@ class DatabaseManager:
             year: str
             ) -> None:
         """Добавляет книгу в базу данных."""
+        if not is_unique_book_title(self.cursor, user_id, title):
+            print("Книга с таким названием уже существует.")
+            return
+
+        if not is_valid_year(year):
+            print("Неверный год издания.")
+            return
+
         self.cursor.execute('''
             INSERT INTO books (user_id, title, author, year, status)
             VALUES (?, ?, ?, ?, 'в наличии')

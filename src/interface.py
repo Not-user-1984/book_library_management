@@ -181,27 +181,11 @@ class Interface:
                 print(f"Пользователь с ID {user_id} не найден.")
 
     @staticmethod
-    def main(is_test: bool = False) -> None:
-        """Основной цикл программы."""
-        storage = Interface.choose_storage(is_test)
-
-        while True:
-            choice = input(
-                "Выберите действие (1 - Вход, 2 - Регистрация, 3 - Выход): ")
-            if choice == '1':
-                manager, user_id = Interface.authenticate_user(
-                    storage, is_test)
-                if manager and user_id:
-                    break
-            elif choice == '2':
-                manager, user_id = Interface.create_user(storage, is_test)
-                break
-            elif choice == '3':
-                print("Выход из программы.")
-                return
-            else:
-                print("Неверный выбор. Попробуйте снова.")
-
+    def user_menu(
+        manager: Union[DatabaseManager, JsonManager],
+        user_id: str
+    ) -> None:
+        """Меню действий для аутентифицированного пользователя."""
         while True:
             print("\nМеню:")
             print("1. Добавить книгу")
@@ -226,5 +210,30 @@ class Interface:
             elif choice == '6':
                 print("Выход из программы.")
                 break
+            else:
+                print("Неверный выбор. Попробуйте снова.")
+
+    @staticmethod
+    def main(is_test: bool = False) -> None:
+        """Основной цикл программы."""
+        storage = Interface.choose_storage(is_test)
+
+        while True:
+            choice = input(
+                "Выберите действие (1 - Вход, 2 - Регистрация, 3 - Выход): ")
+            if choice == '1':
+                manager, user_id = Interface.authenticate_user(
+                    storage, is_test)
+                if manager and user_id:
+                    Interface.user_menu(manager, user_id)
+                    break
+            elif choice == '2':
+                manager, user_id = Interface.create_user(storage, is_test)
+                if manager and user_id:
+                    Interface.user_menu(manager, user_id)
+                    break
+            elif choice == '3':
+                print("Выход из программы.")
+                return
             else:
                 print("Неверный выбор. Попробуйте снова.")

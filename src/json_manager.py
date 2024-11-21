@@ -4,11 +4,14 @@ import random
 import string
 from typing import List, Dict, Union
 from .animation import Animation
+from .validation_json import (
+    is_unique_username,
+    is_unique_book_title,
+    is_valid_year)
 
 
 class JsonManager:
     """Класс для управления данными в JSON-файле."""
-
 
     @staticmethod
     def load_library(db_file) -> List[Dict[str, Union[int, str]]]:
@@ -40,6 +43,14 @@ class JsonManager:
         title: str, author: str, year: str
     ) -> None:
         """Добавляет новую книгу в библиотеку."""
+        if not is_unique_book_title(books, title):
+            print("Книга с таким названием уже существует.")
+            return
+
+        if not is_valid_year(year):
+            print("Неверный год издания.")
+            return
+
         book = {
             'id': JsonManager.generate_id(books),
             'title': title,
@@ -86,7 +97,6 @@ class JsonManager:
         else:
             print("Библиотека пуста.")
 
-
     @staticmethod
     def change_status(books: List[Dict[str, Union[int, str]]], book_id: int, new_status: str) -> None:
         """Изменяет статус книги."""
@@ -96,7 +106,6 @@ class JsonManager:
                 Animation.animate_success("Статус книги успешно изменен")
                 return
         print(f"Книга с ID {book_id} не найдена.")
-
 
     @staticmethod
     def generate_user_id(users: List[Dict[str, Union[int, str]]]) -> str:
@@ -110,7 +119,10 @@ class JsonManager:
                 return user_id
 
     @staticmethod
-    def check_user_by_id(users: List[Dict[str, Union[int, str]]], user_id: int) -> bool:
+    def check_user_by_id(
+        users: List[Dict[str, Union[int, str]]],
+        user_id: int
+    ) -> bool:
         """Проверяет существование пользователя по ID."""
         for user in users:
             if user['id'] == user_id:
@@ -123,6 +135,10 @@ class JsonManager:
         username: str, password: str
     ) -> None:
         """Создает нового пользователя."""
+        if not is_unique_username(users, username):
+            print("Пользователь с таким именем уже существует.")
+            return None
+
         user_id = JsonManager.generate_user_id(users)
         user = {
             'id': user_id,

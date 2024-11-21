@@ -18,37 +18,37 @@ class TestInterface(unittest.TestCase):
 
     @patch('builtins.input', side_effect=['test_user', 'test_password'])
     def test_create_user_sqlite(self, mock_input):
-        db_manager, user_id = Interface.create_user('sqlite',is_test=True)
+        db_manager, user_id = Interface.create_user('sqlite',)
         self.assertIsInstance(db_manager, DatabaseManager)
         self.assertIsNotNone(user_id)
 
     @patch('builtins.input', side_effect=['test_user', 'test_password'])
     def test_create_user_json(self, mock_input):
-        json_manager, user_id = Interface.create_user('json',is_test=True)
+        json_manager, user_id = Interface.create_user('json')
         self.assertIsInstance(json_manager, JsonManager)
         # self.assertEqual(user_id, 1)
 
     @patch('builtins.input', side_effect=['test_user', 'test_password'])
     def test_authenticate_user_sqlite(self, mock_input):
         # Создаем пользователя перед аутентификацией
-        db_manager, user_id = Interface.create_user('sqlite', is_test=True)
+        db_manager, user_id = Interface.create_user('sqlite')
         self.assertIsInstance(db_manager, DatabaseManager)
         self.assertIsNotNone(user_id)
 
         # Теперь пробуем аутентифицироваться
-        db_manager, user_id = Interface.authenticate_user('sqlite', is_test=True)
+        db_manager, user_id = Interface.authenticate_user('sqlite')
         self.assertIsInstance(db_manager, DatabaseManager)
         self.assertIsNotNone(user_id)
 
     @patch('builtins.input', side_effect=['test_user', 'test_password'])
     def test_authenticate_user_json(self, mock_input):
         # Создаем пользователя перед аутентификацией
-        json_manager, user_id = Interface.create_user(is_test=True)
+        json_manager, user_id = Interface.create_user()
         self.assertIsInstance(json_manager, JsonManager)
         # self.assertEqual(user_id, 1)
 
         # Теперь пробуем аутентифицироваться
-        json_manager, user_id = Interface.authenticate_user(is_test=True)
+        json_manager, user_id = Interface.authenticate_user()
         self.assertIsInstance(json_manager, JsonManager)
         # self.assertEqual(user_id, 1)
 
